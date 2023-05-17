@@ -4,16 +4,17 @@ dir_ckpt="/home/jackhe/PyTorch-StudioGAN/ckpt" #ckpt path
 dir_config="/home/jackhe/PyTorch-StudioGAN/src/configs/CIFAR10" #config path
 
 # Check if the correct number of arguments are provided
-if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
-  echo "Usage: $0 [CUDA] [model] [optional: version]"
+if [ "$#" -lt 3 ] || [ "$#" -gt 4 ]; then
+  echo "Usage: $0 [CUDA] [model] [number of image to save] [optional: version]"
   exit 1
 fi
 
 CUDA="$1"
 model="$2"
+num="$3"
 # Check if version is specified
-if [ "$#" -eq 3 ]; then
-  ckpt_model="*$model-train*$3*"
+if [ "$#" -eq 4 ]; then
+  ckpt_model="*$model-train*$4*"
 else
   ckpt_model="*$model-train*"
 fi
@@ -46,9 +47,9 @@ else
   echo "config: $result_config"
 fi
 
-echo -e "Going to run:\n CUDA_VISIBLE_DEVICES=$CUDA python src/main.py -v -sf -cfg $result_config -ckpt $result_ckpt -data DATA_PATH"
+echo -e "Going to run:\n CUDA_VISIBLE_DEVICES=$CUDA python src/main.py -v -sf -sf_num $num -cfg $result_config -ckpt $result_ckpt -data DATA_PATH"
 echo -e "You have \e[31m 10 sec \e[0m to stop me !"
 sleep 10
 
 echo "start"
-CUDA_VISIBLE_DEVICES=$CUDA python src/main.py -v -sf -cfg $result_config -ckpt $result_ckpt -data DATA_PATH
+CUDA_VISIBLE_DEVICES=$CUDA python src/main.py -v -sf -sf_num $num -cfg $result_config -ckpt $result_ckpt -data DATA_PATH
